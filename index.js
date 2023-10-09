@@ -10,8 +10,6 @@ app.use(cors());
 
 
 const uri = process.env.DATABASE_URI;
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.
-// DB_PASS}@cluster0.qawsvmr.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -45,7 +43,9 @@ async function run() {
 
     app.post("/tasks", async (req, res) => {
       const newTask = req.body;
-
+    
+      console.log(newTask);
+    
       try {
         const result = await tasksCollection.insertOne(newTask);
         res.status(201).json(result);
@@ -54,6 +54,7 @@ async function run() {
         res.status(500).json({ error: "Internal Server Error" });
       }
     });
+    
 
     app.delete("/tasks/:id", async (req, res) => {
       const taskId = req.params.id;
@@ -76,6 +77,8 @@ async function run() {
     app.patch("/tasks/:id", async (req, res) => {
       const taskId = req.params.id;
       const updatedTaskData = req.body;
+
+      console.log(taskId, updatedTaskData);
 
       try {
         const result = await tasksCollection.updateOne(
